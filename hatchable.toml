@@ -1,0 +1,24 @@
+[auth]
+enabled = true
+providers = ["email"]
+
+[ai]
+required = true
+providers = ["openai"]
+description = "Powers STANCE profile-based competition, project, teammate and skill recommendations."
+
+[db.tables.student_profiles]
+read = "own"
+write = "own"
+
+[db.tables.competition_participation]
+read = "own"
+write = "own"
+
+[db.tables.project_applications]
+read = "own"
+write = "own"
+
+[db.tables.skillbits_transactions]
+read = "own"
+write = "own"
