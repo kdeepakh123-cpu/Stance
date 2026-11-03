@@ -50,6 +50,7 @@ document.querySelectorAll('.quick-card').forEach(card=>card.addEventListener('cl
 document.querySelectorAll('.nav-item').forEach(item=>item.addEventListener('click',()=>{}));
 fetch('/tabs.html').then(response=>response.text()).then(markup=>{
  document.querySelector('.dashboard').insertAdjacentHTML('afterend',markup);
+ try{const v=JSON.parse(localStorage.getItem('stancePortfolioBuilderDraft')||'null');if(v)for(const [key,id] of Object.entries({project:'pbProject',role:'pbRole',tech:'pbTech',link:'pbLink',notes:'pbNotes',skills:'pbSkills',goal:'pbGoal'})){const el=document.getElementById(id);if(el)el.value=v[key]||'';}}catch(e){}
 }).catch(()=>notify('Could not load tab pages. Please refresh.'));
 document.addEventListener('click',event=>{
  const button=event.target.closest('[data-action]');if(!button)return;
@@ -70,7 +71,7 @@ document.addEventListener('click',event=>{
   editPortfolio:['Edit Portfolio','Update your introduction, skills, project highlights, certificates and links.'],
   addProject:['Add a Project','Add the project title, your role, technologies used, project link and outcomes.'],
   addCertificate:['Add Certificate','Add the certificate name, issuing organization, completion date and credential link.'],
-  portfolioAI:['AI Portfolio Builder','Suggested project summary: Built a student-focused solution using Python and IoT concepts. Add measurable results, your individual contribution and a demo link to make it stronger.'],
+  // portfolioAI is handled by the interactive free portfolio builder below.
   skillAI:['Your Skill Improvement Plan','1. Deploy a Python or web project to the cloud. 2. Practise data structures weekly. 3. Document your work with screenshots and a README. 4. Request peer review.'],
   skillEvidence:['How Skill Score works','A responsible Skill Score should use verified projects, assessments, competition work and peer feedback—not just self-entered skills or participation.'],
   redeem:['SkillBits Rewards','You have 2,450 demo SkillBits. Browse eligible rewards and check the points required before redeeming.'],
@@ -84,6 +85,44 @@ document.addEventListener('click',event=>{
  if(ai[action])showDialog(ai[action][0],ai[action][1]);
 });
 
+// Free portfolio and resume writing assistant. It restructures user notes without inventing results.
+function portfolioDraftValues(){
+ const get=id=>document.getElementById(id)?.value.trim()||'';
+ return {project:get('pbProject'),role:get('pbRole'),tech:get('pbTech'),link:get('pbLink'),notes:get('pbNotes'),skills:get('pbSkills'),goal:get('pbGoal')};
+}
+function improvePortfolioDraft(){
+ const v=portfolioDraftValues();
+ if(!v.project||!v.notes){notify('Add a project name and a few project notes first.');return;}
+ const sentences=v.notes.split(/[.!?]+/).map(x=>x.trim()).filter(Boolean);
+ const contribution=sentences.slice(0,3).join('. ')+(sentences.length?'.':'');
+ const description=`${v.role?v.role+' on ':''}${v.project}: ${contribution} ${v.tech?'Technologies used: '+v.tech+'.':''}`;
+ const output=document.getElementById('pbOutput');
+ output.innerHTML='';
+ const heading=document.createElement('h4');heading.textContent='Improved portfolio description';
+ const para=document.createElement('p');para.textContent=description;
+ const hint=document.createElement('p');hint.textContent='Make it stronger: add a real outcome (time saved, users tested, accuracy, performance or features completed) if you can verify it.';
+ const copy=document.createElement('button');copy.className='btn btn-outline';copy.textContent='Copy description';copy.addEventListener('click',()=>navigator.clipboard?.writeText(description).then(()=>notify('Project description copied.')).catch(()=>notify('Select and copy the description manually.')));
+ output.append(heading,para,hint,copy);
+ const resume=document.getElementById('pbResumeArea');resume.innerHTML='';
+ const title=document.createElement('h3');title.textContent='Resume draft';
+ const intro=document.createElement('p');intro.textContent=v.goal?'Career objective: Student seeking '+v.goal+'.':'Career objective: Engineering student seeking an opportunity to apply technical skills and contribute to real projects.';
+ const projectHead=document.createElement('h4');projectHead.textContent='PROJECT EXPERIENCE';
+ const project=document.createElement('p');project.textContent=description;
+ const skills=document.createElement('p');skills.textContent='Skills: '+(v.skills||v.tech||'Add your skills');
+ const link=document.createElement('p');link.textContent=v.link?'Project link: '+v.link:'Project link: Add a GitHub or demo link if available.';
+ resume.append(title,intro,projectHead,project,skills,link);
+ const actions=document.createElement('div');actions.className='studio-controls';
+ const copyResume=document.createElement('button');copyResume.className='btn btn-outline';copyResume.textContent='Copy resume draft';copyResume.addEventListener('click',()=>navigator.clipboard?.writeText([intro.textContent,'PROJECTS',description,skills.textContent,link.textContent].join('\\n')).then(()=>notify('Resume draft copied.')).catch(()=>notify('Select and copy the resume draft manually.')));
+ const download=document.createElement('button');download.className='btn btn-primary';download.textContent='Download resume draft (.txt)';download.addEventListener('click',()=>{const text=[intro.textContent,'','PROJECTS',description,'',skills.textContent,link.textContent].join('\\n');const blob=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='stance-resume-draft.txt';a.click();URL.revokeObjectURL(url);});
+ actions.append(copyResume,download);resume.append(actions);
+ localStorage.setItem('stancePortfolioBuilderDraft',JSON.stringify(v));
+}
+document.addEventListener('click',event=>{
+ const button=event.target.closest('[data-action="portfolioAI"]');
+ if(button){improvePortfolioDraft();return;}
+ if(event.target.closest('#pbSave')){localStorage.setItem('stancePortfolioBuilderDraft',JSON.stringify(portfolioDraftValues()));notify('Portfolio draft saved in this browser.');}
+});
+document.addEventListener('DOMContentLoaded',()=>{try{const v=JSON.parse(localStorage.getItem('stancePortfolioBuilderDraft')||'null');if(v)for(const [key,id] of Object.entries({project:'pbProject',role:'pbRole',tech:'pbTech',link:'pbLink',notes:'pbNotes',skills:'pbSkills',goal:'pbGoal'})){const el=document.getElementById(id);if(el)el.value=v[key]||'';}}catch(e){}});
 const stanceTasks={sih:'competition_match',teamScan:'team_match',skillAI:'skill_plan',portfolioAI:'portfolio_review',rewardAI:'reward_plan',notificationAI:'skill_plan'};
 let stanceProfile=null;
 async function stanceLoadProfile(){
@@ -137,6 +176,25 @@ document.addEventListener('click',e=>{
  }
  if(action==='projectJoin'){studioTrack('explored_accessible_learning_app');}
  if(action==='hackathonJoin'){studioTrack('joined_competition');}
+ if(action==='skillAI'){
+  e.preventDefault();
+  const p=stanceProfile||{},raw=(p.skills||[]).map(x=>String(x).toLowerCase());
+  const has=terms=>raw.some(s=>terms.some(t=>s.includes(t)));
+  const breakdown=[
+   {name:'Python',score:has(['python'])?92:has(['programming','coding'])?68:35,level:has(['python'])?'Strong':'Build evidence',note:'Show it through a working script or small application.'},
+   {name:'Web development',score:has(['web','html','css','javascript','react'])?85:35,level:has(['web','html','css','javascript','react'])?'Strong':'Build evidence',note:'Publish a responsive site and link the live demo.'},
+   {name:'Problem solving',score:has(['dsa','data structures','algorithms'])?80:55,level:has(['dsa','data structures','algorithms'])?'Growing':'Developing',note:'Practise problems and explain your approach.'},
+   {name:'Cloud deployment',score:has(['aws','cloud','azure','gcp','deployment'])?75:28,level:has(['aws','cloud','azure','gcp','deployment'])?'Growing':'Priority gap',note:'Deploy one project and document the steps.'},
+   {name:'Git & collaboration',score:has(['git','github'])?72:30,level:has(['git','github'])?'Growing':'Priority gap',note:'Use commits, branches and a clear README.'}
+  ];
+  const plan=document.getElementById('skillPlanOutput');
+  const safe=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  plan.hidden=false;
+  if(!document.getElementById('skillPlanStyles')){const st=document.createElement('style');st.id='skillPlanStyles';st.textContent='.skill-plan-output{margin-top:18px;padding:18px;border:1px solid #51456f;border-radius:16px;background:#211d31;color:#f4f0ff}.skill-plan-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.skill-plan-head h4{margin:7px 0;color:#fff;font-size:17px}.skill-plan-head p,.skill-plan-row small,.skill-plan-weeks p,.skill-plan-weeks small,.skill-plan-goal p{color:#bdb5d2;font-size:11px;line-height:1.55}.skill-plan-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:17px 0}.skill-plan-row{padding:12px;border:1px solid #403650;border-radius:12px;background:#292438}.skill-plan-row>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:11px}.skill-plan-row>div:first-child span{color:#b9a9ec}.skill-plan-meter{height:6px;background:#494158;border-radius:8px;margin:9px 0;overflow:hidden}.skill-plan-meter i{display:block;height:100%;background:linear-gradient(90deg,#a48bff,#6e59d9);border-radius:8px}.skill-plan-row small{display:block}.skill-plan-subtitle{margin:16px 0 10px;color:#fff}.skill-plan-weeks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.skill-plan-weeks article{padding:13px;border:1px solid #403650;border-radius:12px;background:#292438}.skill-plan-weeks b,.skill-plan-goal b{font-size:11px;color:#e9e1ff}.skill-plan-weeks p{margin:7px 0}.skill-plan-weeks small{color:#b7a4f1}.skill-plan-goal{margin-top:12px;padding:13px;border-radius:12px;background:#302a43}.skill-plan-goal p{margin:6px 0 0}.skill-plan-output .studio-footnote{color:#a9a0bd}@media(max-width:600px){.skill-plan-breakdown,.skill-plan-weeks{grid-template-columns:1fr}}';document.head.appendChild(st);}
+  plan.innerHTML='<div class="skill-plan-head"><div><span class="eyebrow">YOUR PERSONAL ROADMAP</span><h4>Build a stronger internship profile</h4><p>Based on the skills listed in your STANCE profile: '+safe((p.skills||[]).join(', ')||'No skills added yet')+'</p></div><span class="pill">4 weeks</span></div><div class="skill-plan-breakdown">'+breakdown.map(x=>'<div class="skill-plan-row"><div><b>'+x.name+'</b><span>'+x.score+'/100 · '+x.level+'</span></div><div class="skill-plan-meter"><i style="width:'+x.score+'%"></i></div><small>'+x.note+'</small></div>').join('')+'</div><h4 class="skill-plan-subtitle">Your 4-week improvement plan</h4><div class="skill-plan-weeks"><article><b>Week 1 · Cloud basics</b><p>Learn the basics of AWS or another cloud platform: regions, storage, compute and permissions.</p><small>Deliverable: a one-page cloud notes sheet.</small></article><article><b>Week 2 · Deploy a project</b><p>Take your existing Python or web project and deploy it. Test it from another device.</p><small>Deliverable: a working public demo link.</small></article><article><b>Week 3 · GitHub & documentation</b><p>Push clean source code, add setup instructions, screenshots and explain your contribution.</p><small>Deliverable: a complete GitHub README.</small></article><article><b>Week 4 · Prove your skills</b><p>Practise 5 problem-solving questions, ask someone to review your project and fix the top issues.</p><small>Deliverable: an updated portfolio project entry.</small></article></div><div class="skill-plan-goal"><b>Target outcome</b><p>One deployed project with a GitHub README, clear evidence of your role and a link you can share in internship applications.</p></div><p class="studio-footnote">These scores are illustrative profile indicators, not test results or verified assessments. This free plan uses the skills saved in your profile; it does not call a paid AI model. Edit your profile skills to refresh the breakdown.</p>';
+  plan.scrollIntoView({behavior:'smooth',block:'nearest'});
+  return;
+ }
  if(action&&stanceTasks[action]){
   e.preventDefault();
   const btn=e.target.closest('[data-action]');btn.disabled=true;
@@ -144,10 +202,17 @@ document.addEventListener('click',e=>{
   if(action==='competitionAI')context='Detailed eligibility and fit review for these illustrative listings: Smart India Hackathon 2026 (software/hardware); National Innovation Challenge (innovation/technology); Build for Bharat (software); AI for Social Good Challenge (AI/social impact); Smart Campus Buildathon (IoT); Open Source Sprint (software contribution); AI for Sustainable Future (AI/sustainability); Student Product Design Challenge (product design); Campus Coding League (programming). Use the saved profile as the source of student details. Apply year 1st–4th and CGPA >= 6.0 only as a STANCE demo baseline, never as organiser rules. For each listing discuss qualitative skill fit, not guaranteed eligibility. Return: profile snapshot, strengths, missing profile details, separate demo baseline check, best 3 skill-fit competitions with reasons and gaps, 3-step improvement plan, and organiser-rule verification checklist. Official deadlines, age, branch, year, CGPA, team-size and other restrictions are unknown unless supplied; do not invent percentages or facts.';
   else if(action==='projectIdeas')context=document.querySelector('[data-tab="Projects"] textarea')?.value||'';
   else if(action==='priceAI')context='Give general guidance on evaluating second-hand item prices; ask for item details.';
-  fetch('/api/assistant',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task:stanceTasks[action],context})})
-   .then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error||'AI request failed');showDialog('STANCE AI',d.answer);})
-   .catch(err=>showDialog('STANCE AI',err.message))
-   .finally(()=>btn.disabled=false);
+  // Keep these student tools usable without an external/paid AI service.
+  const p=stanceProfile||{},skills=(p.skills||[]),projects=(p.projects||[]);
+  const plans={
+   sih:'Competition preparation checklist\\n1. Read the official problem statement and eligibility rules.\\n2. Confirm your team and each member role.\\n3. Break the solution into a prototype, testing and presentation.\\n4. Keep a README, demo and submission checklist.\\n\\nUse the organiser website for current dates and rules.',
+   teamScan:'Team-building suggestion\\nYour listed skills: '+(skills.join(', ')||'Add skills to your profile')+'.\\nLook for teammates with complementary skills rather than the same role: frontend, backend, UI/UX, hardware/IoT, research or pitching.\\n\\nThis is guidance only; actual matches require other students to opt in.',
+   skillAI:'Your skill improvement plan\\n1. Choose one skill to improve: '+(skills[0]||'Python or web development')+'.\\n2. Build a small project that demonstrates it.\\n3. Add a README with your role, tools and screenshots.\\n4. Ask a peer to review it and fix the top 2 issues.\\n5. Add a real project link to your portfolio.',
+   rewardAI:'Your SkillBits plan\\n1. Pick a reward and check its points requirement.\\n2. Complete a project milestone and document the result.\\n3. Participate in a competition and record your contribution.\\n4. Help another student and collect genuine feedback.\\n\\nOnly verified activities should earn points; reward balances shown in this demo are illustrative.',
+   notificationAI:'Your priority checklist\\n1. Review upcoming competition deadlines with the official organiser.\\n2. Reply to any pending team invitations.\\n3. Check project feedback and choose one improvement.\\n4. Update your portfolio with completed work.'
+  };
+  showDialog('STANCE Student Assistant',plans[action]||'Add your skills and project details to your profile to receive a practical next-step plan.');
+  btn.disabled=false;
  }
 });
 document.getElementById('profileClose')?.addEventListener('click',()=>document.getElementById('profileEditor').close());
