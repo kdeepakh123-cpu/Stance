@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11101b">
+<title>STANCE — Build Your Future</title>
+<link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/tabs.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <a class="brand" href="#" aria-label="STANCE home"><span class="brand-mark">S</span><span>STANCE</span></a>
+  <nav class="nav-list" aria-label="Main navigation">
+    <button class="nav-item active" data-page="Home"><span class="nav-icon">⌂</span>Home</button>
+    <button class="nav-item" data-page="Competitions"><span class="nav-icon">♜</span>Competitions</button>
+    <button class="nav-item" data-page="Projects"><span class="nav-icon">◇</span>Projects</button>
+    <button class="nav-item" data-page="Services"><span class="nav-icon">✿</span>Services</button>
+    <button class="nav-item" data-page="Marketplace"><span class="nav-icon">▣</span>Marketplace</button>
+    <button class="nav-item" data-page="Team Formation"><span class="nav-icon">♧</span>Team Formation</button>
+    <button class="nav-item" data-page="Portfolio"><span class="nav-icon">▤</span>Portfolio</button>
+    <button class="nav-item" data-page="Skill Score"><span class="nav-icon">☆</span>Skill Score</button>
+    <button class="nav-item" data-page="SkillBits"><span class="nav-icon">◉</span>SkillBits</button>
+    <button class="nav-item" data-page="Messages"><span class="nav-icon">☏</span>Messages <span class="nav-badge">2</span></button>
+    <button class="nav-item" data-page="Notifications"><span class="nav-icon">♧</span>Notifications</button>
+  </nav>
+  <div class="sidebar-promo"><div class="promo-stars">✦　·　✧</div><h3>Earn. Build. Grow.</h3><p>Participate in competitions, complete projects and earn SkillBits to unlock exclusive rewards!</p><button class="btn btn-white" data-action="rewards">Explore Rewards <span>→</span></button><div class="gift-art">🎁</div></div>
+</aside>
+<main class="main-area">
+<header class="topbar">
+  <button class="mobile-menu" aria-label="Toggle navigation">☰</button>
+  <label class="top-search"><span>⌕</span><input id="globalSearch" placeholder="Search for competitions, projects, services, or people..." autocomplete="off"></label>
+  <div class="top-actions"><button class="icon-button" id="notificationsBtn" aria-label="Notifications">♧<i>2</i></button><div class="mini-avatar">DK</div><button class="profile-menu" id="profileBtn">Student <span>⌄</span></button></div>
+</header>
+<div class="dashboard">
+<section class="content-column">
+  <section class="hero">
+    <div class="hero-copy"><div class="eyebrow">YOUR STUDENT COMMUNITY</div><h1>Build Your Future</h1><h2>Compete, Collaborate, Earn.</h2><p>Join hackathons, work on real projects, offer your skills and grow with a community of like-minded students.</p>
+    <label class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="Search competitions, projects, services..."><button id="heroSearchBtn" aria-label="Search">➜</button></label></div>
+    <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="cityline"></div><div class="students"><span>♟</span><span>♟</span><span>♟</span><span>♟</span><span>♟</span></div></div>
+  </section>
+  <section class="quick-grid">
+    <button class="quick-card" data-page="Competitions"><span class="quick-icon amber">🏆</span><strong>Find Competitions</strong><small>Hackathons, challenges, etc.</small></button>
+    <button class="quick-card" data-page="Services"><span class="quick-icon blue">▣</span><strong>Offer Services</strong><small>Freelance &amp; get paid</small></button>
+    <button class="quick-card" data-page="Marketplace"><span class="quick-icon pink">▱</span><strong>Buy / Sell Products</strong><small>Student marketplace</small></button>
+    <button class="quick-card" data-page="Team Formation"><span class="quick-icon violet">♧</span><strong>Form a Team</strong><small>AI-powered matching</small></button>
+  </section>
+  <section class="section-block" id="competitions">
+    <div class="section-heading"><div><h3>Featured Competitions</h3><p class="section-subtitle">Opportunities to challenge yourself and grow</p></div><button class="text-link" data-page="Competitions">View All →</button></div>
+    <div class="competition-grid searchable">
+      <article class="competition-card nature"><span class="tag green-tag">Hackathon</span><div class="competition-content"><h4>AI for Sustainable Future</h4><p>◉ IIT Madras</p><div class="competition-meta"><b>🏆 ₹1,00,000</b><span>15 Sep 2026</span></div><small>Prize Pool <span>Deadline</span></small></div></article>
+      <article class="competition-card tech"><span class="tag blue-tag">Competition</span><div class="competition-content"><h4>Build for Bharat</h4><p>◉ Microsoft</p><div class="competition-meta"><b>🏆 ₹75,000</b><span>22 Sep 2026</span></div><small>Prize Pool <span>Deadline</span></small></div></article>
+      <article class="competition-card india"><span class="tag purple-tag">Hackathon</span><div class="competition-content"><h4>Smart India Hackathon 2026</h4><p>◉ Government of India</p><div class="competition-meta"><b>🏆 ₹1,00,000</b><span>30 Sep 2026</span></div><small>Prize Pool <span>Deadline</span></small></div></article>
+    </div>
+  </section>
+  <section class="section-block">
+    <div class="section-heading"><div><h3>AI Team Matches</h3><p class="section-subtitle">Based on your skills, interests and goals</p></div><button class="text-link" data-page="Team Formation">View All →</button></div>
+    <div class="team-layout">
+      <article class="recommended-card searchable"><div class="recommend-top"><span class="recommend-label">✦ Personalized Team</span><span class="match-pill">96% Match</span></div><h4>EcoTech — Smart Agriculture Solution</h4><div class="skill-tags"><span>AI/ML</span><span>ECE</span><span>Frontend</span><span>UX/UI</span></div><p class="muted tiny">4/5 skills matched · Great balance of experience</p><div class="members"><div class="member"><div class="member-avatar avatar-one">A</div><strong>Student A</strong><small>ML | 8.8</small></div><div class="member"><div class="member-avatar avatar-two">S</div><strong>Student B</strong><small>ECE | 8.6</small></div><div class="member"><div class="member-avatar avatar-three">R</div><strong>Student C</strong><small>Frontend | 9.0</small></div><div class="member"><div class="member-avatar avatar-four">A</div><strong>Student</strong><small>UX/UI | 8.9</small></div></div><div class="card-actions"><button class="btn btn-outline" data-action="details">View Details</button><button class="btn btn-primary" data-action="join">Join Team</button></div></article>
+      <article class="matches-card"><div class="mini-heading"><h4>Your Matches</h4><button class="text-link" data-page="Team Formation">View All →</button></div><div class="match-row"><span class="match-icon">♟</span><div><strong>Team Alpha</strong><small>AI/ML · ECE · Backend · Design</small></div><b>97%</b></div><div class="match-row"><span class="match-icon">▣</span><div><strong>Team Horizon</strong><small>Web Dev · AI/UX · Marketing</small></div><b>95%</b></div><div class="match-row"><span class="match-icon">⚙</span><div><strong>CodeBrokers</strong><small>Full Stack · AI/ML · Design</small></div><b>78%</b></div></article>
+    </div>
+  </section>
+  <section class="section-block services-section">
+    <div class="section-heading"><div><h3>Popular Services &amp; Products</h3></div><button class="text-link" data-page="Marketplace">View All →</button></div>
+    <div class="product-grid searchable">
+      <article class="product-card"><span class="product-icon">‹/›</span><div class="product-info"><h4>Website Development</h4><p>by Student</p><div class="rating">★ 4.8 <span>(94)</span></div><div class="product-bottom"><strong>₹ 2,000</strong><button class="small-btn" data-action="book">Book Now</button></div></div></article>
+      <article class="product-card"><span class="product-icon">✎</span><div class="product-info"><h4>Logo Design</h4><p>by Student</p><div class="rating">★ 4.9 <span>(82)</span></div><div class="product-bottom"><strong>₹ 1,000</strong><button class="small-btn" data-action="book">Book Now</button></div></div></article>
+      <article class="product-card"><span class="product-icon">▤</span><div class="product-info"><h4>Notes (Engineering)</h4><p>by Student</p><div class="rating">★ 4.7 <span>(47)</span></div><div class="product-bottom"><strong>₹ 250</strong><button class="small-btn" data-action="buy">Buy Now</button></div></div></article>
+      <article class="product-card"><span class="product-icon">▣</span><div class="product-info"><h4>Used Laptop (i5, 8GB)</h4><p>by Student</p><div class="rating">★ 4.6 <span>(18)</span></div><div class="product-bottom"><strong>₹ 18,000</strong><button class="small-btn" data-action="buy">Buy Now</button></div></div></article>
+    </div>
+  </section>
+</section>
+<aside class="right-column">
+  <section class="profile-card panel"><div class="profile-main"><div class="profile-avatar">DK</div><div><h3>Student</h3><p>Computer Science Engineering</p><p>2nd Year · VTU</p><button class="text-link" data-action="profile">View Profile →</button></div></div><div class="stats-grid"><button class="stat-box" data-page="Skill Score"><span class="stat-symbol purple">☆</span><div><small>Skill Score</small><strong>842</strong><em>Top 12%</em></div></button><button class="stat-box" data-page="SkillBits"><span class="stat-symbol gold">◉</span><div><small>SkillBits</small><strong>2,450</strong><em>Wallet →</em></div></button></div></section>
+  <section class="panel activity-panel"><div class="panel-heading"><h3>Recent Activity</h3><button class="text-link" data-page="Notifications">View All →</button></div><div class="activity-list"><div class="activity-row"><span class="activity-icon gold-bg">◉</span><p>You earned <b>500 SkillBits</b><small>for winning the hackathon</small></p><time>2h ago</time></div><div class="activity-row"><span class="activity-icon green-bg">▣</span><p>Your project “Smart Agriculture”<small>got a 98% review!</small></p><time>3h ago</time></div><div class="activity-row"><span class="activity-icon violet-bg">▧</span><p>You completed a service<small>“Website Development”</small></p><time>1d ago</time></div><div class="activity-row"><span class="activity-icon blue-bg">♧</span><p>You received a team invite<small>for AI for Good hackathon</small></p><time>1d ago</time></div><div class="activity-row"><span class="activity-icon gold-bg">◉</span><p>You earned 100 SkillBits<small>for completing a project</small></p><time>2d ago</time></div></div></section>
+  <section class="panel wallet-panel" id="wallet"><div class="panel-heading"><h3>Your SkillBits</h3></div><div class="wallet-total"><span class="coin">◉</span><strong id="walletAmount">2,450</strong><button class="btn btn-primary" data-action="redeem">Redeem</button></div><h4>Ways to Earn</h4><div class="earn-row"><span>🏆　Win a Hackathon</span><b>+500</b></div><div class="earn-row"><span>▣　Complete a project</span><b>+100</b></div><div class="earn-row"><span>♧　Help another student</span><b>+50</b></div><div class="earn-row"><span>☆　Service rating (5★)</span><b>+75</b></div><div class="earn-row"><span>♜　Competition participation</span><b>+50</b></div></section>
+  <section class="panel skills-panel"><div class="panel-heading"><h3>Top Skills</h3><button class="text-link" data-page="Skill Score">View All</button></div><div class="skill-bar"><div><span>⌘　Python</span><b>92%</b></div><i><span style="width:92%"></span></i></div><div class="skill-bar"><div><span>◈　Machine Learning</span><b>78%</b></div><i><span style="width:78%"></span></i></div><div class="skill-bar"><div><span>▣　Web Development</span><b>85%</b></div><i><span style="width:85%"></span></i></div><div class="skill-bar"><div><span>▤　UI/UX Design</span><b>77%</b></div><i><span style="width:77%"></span></i></div><div class="skill-bar"><div><span>⌘　Data Structures</span><b>80%</b></div><i><span style="width:80%"></span></i></div></section>
+</aside>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="profileEditor" class="profile-editor"><form id="profileForm"><div class="dialog-head"><h2>My student profile</h2><button type="button" id="profileClose">✕</button></div><p>Fill in your details. Your profile stays private unless you turn on teammate discovery.</p><label>Display name<input name="display_name" maxlength="80" placeholder="How should STANCE address you?"></label><label>Branch<input name="branch" placeholder="e.g. Computer Science"></label><label>Study year<input name="study_year" placeholder="e.g. 2nd Year"></label><label>Institution<input name="institution" placeholder="College / university"></label><label>About you<textarea name="bio" maxlength="600" placeholder="A short introduction"></textarea></label><label>Skills (comma separated)<input name="skills" placeholder="Python, Web Development, IoT"></label><label>Interests (comma separated)<input name="interests" placeholder="Hackathons, AI, sustainability"></label><label class="discover-toggle"><input type="checkbox" name="discoverable"> Allow my profile to appear in teammate discovery</label><button class="btn btn-primary" type="submit">Save profile</button><p id="profileMsg" role="status"></p></form></dialog>\n<dialog id="actionDialog"><div class="dialog-head"><span class="brand-mark">S</span><button id="closeDialog" aria-label="Close">✕</button></div><h2 id="dialogTitle">Welcome to STANCE</h2><p id="dialogText">Your student journey starts here.</p><button class="btn btn-primary dialog-ok" id="dialogOk">Got it</button></dialog>
+<script src="/app.js"></script>
+</body></html>
